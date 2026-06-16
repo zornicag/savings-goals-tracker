@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Savings Goals Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">Savings Goals Tracker</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/goals">Goals</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Track Your Savings Goals</h1>
+        <p>Create goals, add deposits, withdraw when needed, and follow your progress in one simple place.</p>
+
+        <div class="hero-buttons">
+            <a href="/register" class="btn primary">Register</a>
+            <a href="/login" class="btn secondary">Login</a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Create Goals</h3>
+        <p>Set personal savings goals for travel, education, emergency funds, or future plans.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">💰</div>
+        <h3>Add Deposits</h3>
+        <p>Add money to your goals and track how much you have already saved.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">💸</div>
+        <h3>Withdraw Funds</h3>
+        <p>Withdraw money when needed and keep your savings history clear.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">📈</div>
+        <h3>Track Progress</h3>
+        <p>Follow your progress with clear goal cards and percentage tracking.</p>
+    </div>
+</section>
+
+<footer class="footer">
+    <p>&copy; 2026 Savings Goals Tracker. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
