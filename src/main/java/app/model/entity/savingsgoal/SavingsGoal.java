@@ -43,9 +43,11 @@ public class SavingsGoal {
 
     @NotNull(message = "Current amount is required")
     @DecimalMin(value = "0.00", message = "Current amount cannot be negative")
+    @Builder.Default
     @Column(nullable = false)
     private BigDecimal currentAmount = BigDecimal.ZERO;
 
+    @Builder.Default
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
