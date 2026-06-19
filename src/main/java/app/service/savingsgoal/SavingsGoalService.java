@@ -2,7 +2,6 @@ package app.service.savingsgoal;
 
 import app.model.entity.savingsgoal.SavingsGoal;
 import app.repository.savingsgoal.SavingsGoalRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +10,13 @@ import java.util.UUID;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class SavingsGoalService {
 
     private final SavingsGoalRepository savingsGoalRepository;
+
+    public SavingsGoalService(SavingsGoalRepository savingsGoalRepository) {
+        this.savingsGoalRepository = savingsGoalRepository;
+    }
 
     public List<SavingsGoal> getAllGoals() {
         return savingsGoalRepository.findAll();
