@@ -229,3 +229,17 @@ body {
         text-align: center;
     }
 }
+
+.footer-column a {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.footer-column a:hover {
+    background-color: #d8f5df;
+    color: #14532d;
+}
