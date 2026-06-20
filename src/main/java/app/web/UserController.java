@@ -6,9 +6,11 @@ import app.model.dto.user.UserRegisterRequest;
 import app.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import jakarta.validation.Valid;
 
 @Controller
 public class UserController {
@@ -32,18 +34,32 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute UserRegisterRequest userRegisterRequest) {
+    public String register(@Valid @ModelAttribute UserRegisterRequest userRegisterRequest,
+                           BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
         userService.register(userRegisterRequest);
         return "redirect:/login";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserLoginRequest userLoginRequest, Model model) {
+    public String login(@Valid @ModelAttribute UserLoginRequest userLoginRequest,
+                        BindingResult bindingResult,
+                        Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("userLoginRequest", userLoginRequest);
+            return "login";
+        }
+
         UserDto userDto = userService.login(userLoginRequest);
 
         if (userDto == null) {
             model.addAttribute("userLoginRequest", userLoginRequest);
-            model.addAttribute("error", "Invalid email or password");
+            model.addAttribute("error", "Wrong email or password");
             return "login";
         }
 
