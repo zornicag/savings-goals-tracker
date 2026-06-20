@@ -1,5 +1,6 @@
 package app.web;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +14,13 @@ public class IndexController {
     }
 
     @GetMapping("/home")
-    public ModelAndView home() {
-        return new ModelAndView("home");
+    public ModelAndView home(HttpSession session) {
+        if (session.getAttribute("currentUserId") == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        ModelAndView modelAndView = new ModelAndView("home");
+        modelAndView.addObject("currentUsername", session.getAttribute("currentUsername"));
+        return modelAndView;
     }
 }

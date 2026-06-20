@@ -3,6 +3,7 @@ package app.web;
 import app.model.dto.category.CategoryForm;
 import app.model.entity.category.Category;
 import app.service.category.CategoryService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,13 +26,23 @@ public class CategoryController {
     }
 
     @GetMapping
-    public String getCategories(Model model) {
+    public String getCategories(Model model, HttpSession session) {
+        if (session.getAttribute("currentUserId") == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUsername", session.getAttribute("currentUsername"));
         model.addAttribute("categories", categoryService.getAllCategories());
         return "categories";
     }
 
     @GetMapping("/add")
-    public String getAddCategory(Model model) {
+    public String getAddCategory(Model model, HttpSession session) {
+        if (session.getAttribute("currentUserId") == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUsername", session.getAttribute("currentUsername"));
         if (!model.containsAttribute("categoryForm")) {
             model.addAttribute("categoryForm", new CategoryForm());
         }
@@ -40,7 +51,14 @@ public class CategoryController {
 
     @PostMapping("/add")
     public String addCategory(@Valid @ModelAttribute("categoryForm") CategoryForm categoryForm,
-                              BindingResult bindingResult) {
+                              BindingResult bindingResult,
+                              Model model,
+                              HttpSession session) {
+        if (session.getAttribute("currentUserId") == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUsername", session.getAttribute("currentUsername"));
         if (bindingResult.hasErrors()) {
             return "category-add";
         }
@@ -63,4 +81,3 @@ public class CategoryController {
         }
     }
 }
-

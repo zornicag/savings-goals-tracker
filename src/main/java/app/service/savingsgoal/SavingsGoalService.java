@@ -22,6 +22,10 @@ public class SavingsGoalService {
         return savingsGoalRepository.findAll();
     }
 
+    public List<SavingsGoal> getGoalsByUserId(UUID userId) {
+        return savingsGoalRepository.findByUser_Id(userId);
+    }
+
     public SavingsGoal getById(UUID id) {
         return savingsGoalRepository.findById(id).orElse(null);
     }
@@ -34,4 +38,3 @@ public class SavingsGoalService {
         savingsGoalRepository.deleteById(id);
     }
 }
-

@@ -4,6 +4,7 @@ import app.model.dto.user.UserDto;
 import app.model.dto.user.UserLoginRequest;
 import app.model.dto.user.UserRegisterRequest;
 import app.service.user.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,7 +49,8 @@ public class UserController {
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute UserLoginRequest userLoginRequest,
                         BindingResult bindingResult,
-                        Model model) {
+                        Model model,
+                        HttpSession session) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("userLoginRequest", userLoginRequest);
@@ -63,7 +65,9 @@ public class UserController {
             return "login";
         }
 
+        session.setAttribute("currentUserId", userDto.getId());
+        session.setAttribute("currentUsername", userDto.getUsername());
+
         return "redirect:/home";
     }
 }
-

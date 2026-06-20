@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add Category - Savings Goals Tracker</title>
+    <title>Add Transaction - Savings Goals Tracker</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -19,27 +19,52 @@
     </div>
 </nav>
 
-<section class="hero" style="min-height: 360px;">
+<section class="hero" style="min-height: 380px;">
     <div class="hero-content">
-        <h1>Add Category</h1>
-        <p>Create a category to organize your goals.</p>
+        <h1>Add Transaction</h1>
+        <p>Record a deposit or withdrawal for your savings goal.</p>
 
         <div style="max-width:520px;margin:28px auto 0; text-align:left;">
             <div class="card">
-                <form th:action="@{/categories/add}" th:object="${categoryForm}" method="post" novalidate>
-                    <label for="name">Name</label>
-                    <input type="text" id="name" th:field="*{name}" placeholder="Category name">
-                    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                <form th:action="@{/transactions/add}" th:object="${transactionForm}" method="post" novalidate>
+
+                    <div th:if="${goalError}"
+                         style="background:#fee2e2;color:#991b1b;padding:10px;border-radius:8px;margin-bottom:12px;"
+                         th:text="${goalError}"></div>
+
+                    <label for="savingsGoalId">Savings Goal</label>
+                    <select id="savingsGoalId" th:field="*{savingsGoalId}">
+                        <option value="">-- Select savings goal --</option>
+                        <option th:each="goal : ${goals}"
+                                th:value="${goal.id}"
+                                th:text="${goal.name + ' - current: ' + goal.currentAmount}">Goal</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('savingsGoalId')}" th:errors="*{savingsGoalId}"
+                         style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
+
+                    <label for="type">Type</label>
+                    <select id="type" th:field="*{type}">
+                        <option value="">-- Select type --</option>
+                        <option th:each="t : ${transactionTypes}"
+                                th:value="${t}"
+                                th:text="${t}">TYPE</option>
+                    </select>
+                    <div th:if="${#fields.hasErrors('type')}" th:errors="*{type}"
+                         style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
+
+                    <label for="amount">Amount (EUR)</label>
+                    <input type="number" id="amount" th:field="*{amount}" step="0.01" min="0.01" placeholder="100.00">
+                    <div th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"
                          style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
 
                     <label for="description">Description</label>
-                    <input type="text" id="description" th:field="*{description}" placeholder="Optional description">
+                    <input type="text" id="description" th:field="*{description}" placeholder="e.g. Monthly deposit">
                     <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
                          style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
 
                     <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:12px;">
-                        <button type="submit" class="btn primary">Save Category</button>
-                        <a th:href="@{/categories}" class="btn secondary">Back</a>
+                        <button type="submit" class="btn primary">Save Transaction</button>
+                        <a th:href="@{/transactions}" class="btn secondary">Back</a>
                     </div>
                 </form>
             </div>
@@ -65,6 +90,7 @@
                 <li><a th:href="@{/home}">Home</a></li>
                 <li><a th:href="@{/goals}">Goals</a></li>
                 <li><a th:href="@{/categories}">Categories</a></li>
+                <li><a th:href="@{/transactions}">Transactions</a></li>
             </ul>
         </div>
 

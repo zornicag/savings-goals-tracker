@@ -7,6 +7,7 @@ import app.model.entity.user.User;
 import app.repository.category.CategoryRepository;
 import app.repository.user.UserRepository;
 import app.service.savingsgoal.SavingsGoalService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/goals")
@@ -37,13 +39,24 @@ public class SavingsGoalController {
     }
 
     @GetMapping
-    public String getGoals(Model model) {
-        model.addAttribute("goals", savingsGoalService.getAllGoals());
+    public String getGoals(Model model, HttpSession session) {
+        UUID currentUserId = getCurrentUserId(session);
+        if (currentUserId == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUsername", session.getAttribute("currentUsername"));
+        model.addAttribute("goals", savingsGoalService.getGoalsByUserId(currentUserId));
         return "goals";
     }
 
     @GetMapping("/add")
-    public String getAddGoal(Model model) {
+    public String getAddGoal(Model model, HttpSession session) {
+        if (getCurrentUserId(session) == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUsername", session.getAttribute("currentUsername"));
         if (!model.containsAttribute("savingsGoalForm")) {
             model.addAttribute("savingsGoalForm", new SavingsGoalForm());
         }
@@ -53,14 +66,22 @@ public class SavingsGoalController {
     @PostMapping("/add")
     public String addGoal(@Valid @ModelAttribute("savingsGoalForm") SavingsGoalForm savingsGoalForm,
                           BindingResult bindingResult,
-                          Model model) {
+                          Model model,
+                          HttpSession session) {
+        UUID currentUserId = getCurrentUserId(session);
+        if (currentUserId == null) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("currentUsername", session.getAttribute("currentUsername"));
+
         if (bindingResult.hasErrors()) {
             return "goal-add";
         }
 
-        Optional<User> firstUser = userRepository.findAll().stream().findFirst();
-        if (firstUser.isEmpty()) {
-            model.addAttribute("userError", "Please register a user before creating a goal.");
+        Optional<User> currentUser = userRepository.findById(currentUserId);
+        if (currentUser.isEmpty()) {
+            model.addAttribute("userError", "Please login again.");
             return "goal-add";
         }
 
@@ -76,11 +97,19 @@ public class SavingsGoalController {
         setField(savingsGoal, "currentAmount", savingsGoalForm.getCurrentAmount());
         setField(savingsGoal, "deadline", savingsGoalForm.getTargetDate() == null ? null : savingsGoalForm.getTargetDate().atStartOfDay());
         setField(savingsGoal, "createdAt", LocalDateTime.now());
-        setField(savingsGoal, "user", firstUser.get());
+        setField(savingsGoal, "user", currentUser.get());
         setField(savingsGoal, "category", firstCategory.get());
 
         savingsGoalService.save(savingsGoal);
         return "redirect:/goals";
+    }
+
+    private UUID getCurrentUserId(HttpSession session) {
+        Object currentUserId = session.getAttribute("currentUserId");
+        if (currentUserId instanceof UUID uuid) {
+            return uuid;
+        }
+        return null;
     }
 
     private void setField(SavingsGoal savingsGoal, String fieldName, Object value) {
@@ -93,4 +122,3 @@ public class SavingsGoalController {
         }
     }
 }
-

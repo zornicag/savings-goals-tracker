@@ -10,9 +10,11 @@
 <nav class="navbar">
     <div class="logo">Savings Goals Tracker</div>
     <div class="nav-links">
+        <span style="color:#d1fae5;font-weight:700;margin-right:10px;" th:text="${'Logged in as: ' + currentUsername}">Logged in as: user</span>
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/goals}">Goals</a>
-        <a th:href="@{/goals/add}">Add Goal</a>
+        <a th:href="@{/categories}">Categories</a>
+        <a th:href="@{/transactions}">Transactions</a>
         <a th:href="@{/}">Logout</a>
     </div>
 </nav>
@@ -33,8 +35,12 @@
 
     <div class="card" th:each="goal : ${goals}">
         <h3 th:text="${goal.name}">Goal name</h3>
-        <p><strong>Target amount:</strong> <span th:text="${goal.targetAmount}">0.00</span></p>
-        <p><strong>Current amount:</strong> <span th:text="${goal.currentAmount}">0.00</span></p>
+        <p><strong>Target amount:</strong> <span th:text="${goal.targetAmount}">0.00</span> EUR</p>
+        <p><strong>Current amount:</strong> <span th:text="${goal.currentAmount}">0.00</span> EUR</p>
+        <p th:if="${goal.currentAmount != null and goal.targetAmount != null and goal.currentAmount ge goal.targetAmount}"
+           style="color:#15803d;font-weight:700;">Target is reached</p>
+        <p th:if="${goal.currentAmount != null and goal.targetAmount != null and goal.currentAmount lt goal.targetAmount}"
+           style="color:#1d4ed8;font-weight:700;">In progress</p>
         <p><strong>Target date:</strong>
             <span th:text="${goal.deadline == null ? 'Not set' : #temporals.format(goal.deadline, 'yyyy-MM-dd')}">Not set</span>
         </p>
@@ -72,4 +78,3 @@
 
 </body>
 </html>
-

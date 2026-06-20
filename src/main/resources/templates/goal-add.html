@@ -10,9 +10,11 @@
 <nav class="navbar">
     <div class="logo">Savings Goals Tracker</div>
     <div class="nav-links">
+        <span style="color:#d1fae5;font-weight:700;margin-right:10px;" th:text="${'Logged in as: ' + currentUsername}">Logged in as: user</span>
         <a th:href="@{/home}">Home</a>
         <a th:href="@{/goals}">Goals</a>
-        <a th:href="@{/goals/add}">Add Goal</a>
+        <a th:href="@{/categories}">Categories</a>
+        <a th:href="@{/transactions}">Transactions</a>
         <a th:href="@{/}">Logout</a>
     </div>
 </nav>
@@ -89,4 +91,3 @@
 
 </body>
 </html>
-
