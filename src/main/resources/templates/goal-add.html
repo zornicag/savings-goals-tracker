@@ -37,12 +37,12 @@
                     <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
                          style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
 
-                    <label for="targetAmount">Target Amount</label>
+                    <label for="targetAmount">Target Amount (EUR)</label>
                     <input type="number" id="targetAmount" th:field="*{targetAmount}" step="0.01" min="0.01" placeholder="1000.00">
                     <div th:if="${#fields.hasErrors('targetAmount')}" th:errors="*{targetAmount}"
                          style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
 
-                    <label for="currentAmount">Current Amount</label>
+                    <label for="currentAmount">Current Amount (EUR)</label>
                     <input type="number" id="currentAmount" th:field="*{currentAmount}" step="0.01" min="0" placeholder="0.00">
                     <div th:if="${#fields.hasErrors('currentAmount')}" th:errors="*{currentAmount}"
                          style="color:#b91c1c;margin-top:6px;margin-bottom:10px;"></div>
