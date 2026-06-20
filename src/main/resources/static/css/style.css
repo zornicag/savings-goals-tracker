@@ -168,6 +168,16 @@ body {
     margin-bottom: 14px;
 }
 
+/* CARD GRID (goals / categories list pages) */
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
+    gap: 24px;
+    padding: 50px 60px;
+    justify-content: start;
+}
+
 /* FOOTER */
 
 .footer {
