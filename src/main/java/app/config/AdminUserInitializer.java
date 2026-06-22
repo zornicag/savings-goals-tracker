@@ -35,7 +35,11 @@ public class AdminUserInitializer implements ApplicationRunner {
         Optional<User> existingByUsername = Optional.ofNullable(userRepository.findByUsername(ADMIN_USERNAME))
                 .orElse(Optional.empty());
 
-        if (existingByEmail.isPresent() || existingByUsername.isPresent()) {
+        Optional<User> existingAdmin = existingByEmail.isPresent() ? existingByEmail : existingByUsername;
+        if (existingAdmin.isPresent()) {
+            User admin = existingAdmin.get();
+            admin.setPassword(passwordEncoder.encode(adminPassword));
+            userRepository.save(admin);
             return;
         }
 
